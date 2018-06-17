@@ -7,17 +7,17 @@ require "openssl"
 class Redis::Connection
   def initialize(host, port, unixsocket, ssl_context, dns_timeout = nil, connect_timeout = nil)
     if unixsocket
-      @socket = SocketWrapper.new do
+      @socket = Redis::SocketWrapper.new do
         UNIXSocket.new(unixsocket)
       end
     elsif ssl_context
-      @socket = SocketWrapper.new do
+      @socket = Redis::SocketWrapper.new do
         tcpsocket = TCPSocket.new(host, port, dns_timeout: dns_timeout, connect_timeout: connect_timeout)
         tcpsocket.sync = false
         OpenSSL::SSL::Socket::Client.new(tcpsocket, ssl_context)
       end
     else
-      @socket = SocketWrapper.new do
+      @socket = Redis::SocketWrapper.new do
         tcpsocket = TCPSocket.new(host, port, dns_timeout: dns_timeout, connect_timeout: connect_timeout)
         tcpsocket.sync = false
         tcpsocket

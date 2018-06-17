@@ -1,4 +1,4 @@
-struct SocketWrapper
+struct Redis::SocketWrapper
   def initialize(@socket : TCPSocket | UNIXSocket | OpenSSL::SSL::Socket::Client)
     @connected = true
   end
